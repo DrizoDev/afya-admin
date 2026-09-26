@@ -1,0 +1,160 @@
+<DashboardCard Titulo="Projetos Recentes"
+               Subtitulo="Acompanhe os projetos mais recentes">
+
+    <Menu>
+        <MudMenuItem>Ver todos os projetos</MudMenuItem>
+        <MudMenuItem>Exportar dados</MudMenuItem>
+    </Menu>
+
+    <ChildContent>
+
+        <MudTable Items="@Projetos"
+                  Hover="true"
+                  Elevation="0"
+                  Class="mt-2">
+
+            <HeaderContent>
+                <MudTh>Projeto</MudTh>
+                <MudTh>Cliente</MudTh>
+                <MudTh>Responsável</MudTh>
+                <MudTh>Status</MudTh>
+                <MudTh>Progresso</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+
+                <MudTd DataLabel="Projeto">
+                    <MudText Typo="Typo.subtitle2">
+                        @context.Nome
+                    </MudText>
+                </MudTd>
+
+                <MudTd DataLabel="Cliente">
+                    @context.Cliente
+                </MudTd>
+
+                <MudTd DataLabel="Responsável">
+
+                    <MudStack Row="true"
+                              AlignItems="AlignItems.Center"
+                              Spacing="1">
+
+                        <MudAvatar Size="Size.Small"
+                                   Color="Color.Primary">
+                            @context.Iniciais
+                        </MudAvatar>
+
+                        <MudText Typo="Typo.body2">
+                            @context.Responsavel
+                        </MudText>
+
+                    </MudStack>
+
+                </MudTd>
+
+                <MudTd DataLabel="Status">
+
+                    <MudChip T="string"
+                             Size="Size.Small"
+                             Color="@ObterCorStatus(context.Status)"
+                             Variant="Variant.Text">
+
+                        @context.Status
+
+                    </MudChip>
+
+                </MudTd>
+
+                <MudTd DataLabel="Progresso">
+
+                    <div style="min-width:120px;">
+
+                        <MudStack Row="true"
+                                  AlignItems="AlignItems.Center"
+                                  Spacing="2">
+
+                            <MudProgressLinear Value="@context.Progresso"
+                                               Color="Color.Primary"
+                                               Rounded="true"
+                                               Size="Size.Small"
+                                               Style="width:90px;" />
+
+                            <MudText Typo="Typo.caption">
+                                @context.Progresso%
+                            </MudText>
+
+                        </MudStack>
+
+                    </div>
+
+                </MudTd>
+
+            </RowTemplate>
+
+        </MudTable>
+
+    </ChildContent>
+
+</DashboardCard>
+
+@code {
+
+    private readonly List<ProjetoRecente> Projetos = new()
+    {
+        new(
+            "Portal Acadêmico",
+            "Afya Educação",
+            "Mariana Souza",
+            "MS",
+            "Em andamento",
+            72
+        ),
+
+        new(
+            "Dashboard Financeiro",
+            "MedCel",
+            "João Silva",
+            "JS",
+            "Concluído",
+            100
+        ),
+
+        new(
+            "Aplicativo do Aluno",
+            "Afya Digital",
+            "Ana Martins",
+            "AM",
+            "Em andamento",
+            58
+        ),
+
+        new(
+            "Integração CRM",
+            "Faculdade São Lucas",
+            "Carlos Lima",
+            "CL",
+            "Pendente",
+            34
+        )
+    };
+
+    private Color ObterCorStatus(string status)
+    {
+        return status switch
+        {
+            "Concluído" => Color.Success,
+            "Em andamento" => Color.Primary,
+            "Pendente" => Color.Warning,
+            _ => Color.Default
+        };
+    }
+
+    private record ProjetoRecente(
+        string Nome,
+        string Cliente,
+        string Responsavel,
+        string Iniciais,
+        string Status,
+        int Progresso
+    );
+}
