@@ -49,16 +49,17 @@
                            OnClick="@DarkModeToggle" />
 
             <!-- NOTIFICAÇÕES -->
-            <MudBadge Content="@_notificacoes.Count"
-                      Color="Color.Error"
-                      Overlap="true"
-                      Bordered="true">
+           <MudBadge Content="@_notificacoes.Count"
+          Color="Color.Error"
+          Overlap="true"
+          Bordered="true"
+          Origin="Origin.TopRight"
+          Class="mr-1">
 
-                <MudMenu Icon="@Icons.Material.Outlined.Notifications"
-                         Color="Color.Inherit"
-                         AnchorOrigin="Origin.BottomRight"
-                         TransformOrigin="Origin.TopRight">
-
+    <MudMenu Icon="@Icons.Material.Outlined.Notifications"
+             Color="Color.Inherit"
+             AnchorOrigin="Origin.BottomRight"
+             TransformOrigin="Origin.TopRight">
                     <MudMenuItem Disabled="true">
                         <MudText Typo="Typo.subtitle2">
                             Notificações
@@ -109,11 +110,12 @@
                               AlignItems="AlignItems.Center"
                               Spacing="2">
 
-                        <MudAvatar Size="Size.Large">
-                            <MudImage Src="img/alex-morgan.png"
-                                      Alt="Alex Morgan" />
-                        </MudAvatar>
-
+                       <MudAvatar Size="Size.Large">
+    <img src="/img/alex-morgan.png"
+         alt="Alex Morgan"
+         style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />
+</MudAvatar>
+                        
                         <MudStack Spacing="0">
 
                             <MudStack Row="true"
