@@ -1,17 +1,20 @@
-<DashboardCard Titulo="Projetos Recentes"
-               Subtitulo="Acompanhe os projetos mais recentes">
-
-    <Menu>
-        <MudMenuItem>Ver todos os projetos</MudMenuItem>
-        <MudMenuItem>Exportar dados</MudMenuItem>
-    </Menu>
+<DashboardCard Titulo="Projetos Recentes">
+    <Acoes>
+        <MudButton Href="projetos"
+                   Variant="Variant.Text"
+                   Color="Color.Primary"
+                   EndIcon="@Icons.Material.Filled.ArrowForward">
+            Ver todos
+        </MudButton>
+    </Acoes>
 
     <ChildContent>
-
-        <MudTable Items="@Projetos"
+        <MudTable Items="Projetos"
+                  Dense="true"
                   Hover="true"
                   Elevation="0"
-                  Class="mt-2">
+                  Breakpoint="Breakpoint.Sm"
+                  HeaderClass="mud-background-gray">
 
             <HeaderContent>
                 <MudTh>Projeto</MudTh>
@@ -19,14 +22,32 @@
                 <MudTh>Responsável</MudTh>
                 <MudTh>Status</MudTh>
                 <MudTh>Progresso</MudTh>
+                <MudTh>Prazo</MudTh>
+                <MudTh>Ações</MudTh>
             </HeaderContent>
 
             <RowTemplate>
 
                 <MudTd DataLabel="Projeto">
-                    <MudText Typo="Typo.subtitle2">
-                        @context.Nome
-                    </MudText>
+                    <MudStack Row="true"
+                              Spacing="2"
+                              AlignItems="AlignItems.Center">
+
+                        <MudAvatar Size="Size.Small"
+                                   Rounded="true"
+                                   Class="@Ui.FundoSuave(context.Cor)">
+
+                            <MudIcon Icon="@context.Icone"
+                                     Color="@context.Cor"
+                                     Size="Size.Small" />
+
+                        </MudAvatar>
+
+                        <MudText Typo="Typo.body2">
+                            @context.Nome
+                        </MudText>
+
+                    </MudStack>
                 </MudTd>
 
                 <MudTd DataLabel="Cliente">
@@ -34,14 +55,13 @@
                 </MudTd>
 
                 <MudTd DataLabel="Responsável">
-
                     <MudStack Row="true"
-                              AlignItems="AlignItems.Center"
-                              Spacing="1">
+                              Spacing="2"
+                              AlignItems="AlignItems.Center">
 
                         <MudAvatar Size="Size.Small"
-                                   Color="Color.Primary">
-                            @context.Iniciais
+                                   Color="Color.Default">
+                            @Ui.Iniciais(context.Responsavel)
                         </MudAvatar>
 
                         <MudText Typo="Typo.body2">
@@ -49,112 +69,62 @@
                         </MudText>
 
                     </MudStack>
-
                 </MudTd>
 
                 <MudTd DataLabel="Status">
-
                     <MudChip T="string"
                              Size="Size.Small"
-                             Color="@ObterCorStatus(context.Status)"
-                             Variant="Variant.Text">
-
+                             Variant="Variant.Text"
+                             Color="@context.StatusCor">
                         @context.Status
-
                     </MudChip>
-
                 </MudTd>
 
                 <MudTd DataLabel="Progresso">
 
-                    <div style="min-width:120px;">
+                    <MudGrid Spacing="1" Class="align-center">
 
-                        <MudStack Row="true"
-                                  AlignItems="AlignItems.Center"
-                                  Spacing="2">
-
+                        <MudItem xs="9">
                             <MudProgressLinear Value="@context.Progresso"
-                                               Color="Color.Primary"
+                                               Color="@(context.Progresso == 100 ? Color.Success : Color.Primary)"
                                                Rounded="true"
-                                               Size="Size.Small"
-                                               Style="width:90px;" />
+                                               Size="Size.Small" />
+                        </MudItem>
 
-                            <MudText Typo="Typo.caption">
+                        <MudItem xs="3">
+                            <MudText Typo="Typo.body2">
                                 @context.Progresso%
                             </MudText>
+                        </MudItem>
 
-                        </MudStack>
+                    </MudGrid>
 
-                    </div>
+                </MudTd>
 
+                <MudTd DataLabel="Prazo">
+                    @context.Prazo
+                </MudTd>
+
+                <MudTd DataLabel="Ações">
+                    <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+                             Size="Size.Small"
+                             Dense="true">
+
+                        <MudMenuItem>Ver detalhes</MudMenuItem>
+                        <MudMenuItem>Editar</MudMenuItem>
+                        <MudMenuItem>Excluir</MudMenuItem>
+
+                    </MudMenu>
                 </MudTd>
 
             </RowTemplate>
 
         </MudTable>
-
     </ChildContent>
-
 </DashboardCard>
 
 @code {
-
-    private readonly List<ProjetoRecente> Projetos = new()
-    {
-        new(
-            "Portal Acadêmico",
-            "Afya Educação",
-            "Mariana Souza",
-            "MS",
-            "Em andamento",
-            72
-        ),
-
-        new(
-            "Dashboard Financeiro",
-            "MedCel",
-            "João Silva",
-            "JS",
-            "Concluído",
-            100
-        ),
-
-        new(
-            "Aplicativo do Aluno",
-            "Afya Digital",
-            "Ana Martins",
-            "AM",
-            "Em andamento",
-            58
-        ),
-
-        new(
-            "Integração CRM",
-            "Faculdade São Lucas",
-            "Carlos Lima",
-            "CL",
-            "Pendente",
-            34
-        )
-    };
-
-    private Color ObterCorStatus(string status)
-    {
-        return status switch
-        {
-            "Concluído" => Color.Success,
-            "Em andamento" => Color.Primary,
-            "Pendente" => Color.Warning,
-            _ => Color.Default
-        };
-    }
-
-    private record ProjetoRecente(
-        string Nome,
-        string Cliente,
-        string Responsavel,
-        string Iniciais,
-        string Status,
-        int Progresso
-    );
+    [Parameter, EditorRequired]
+    public IReadOnlyList<ProjetoRecente> Projetos { get; set; }
+        = Array.Empty<ProjetoRecente>();
 }

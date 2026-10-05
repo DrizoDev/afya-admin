@@ -1,81 +1,62 @@
-@page "/"
+    @page "/"
 
-<PageTitle>Dashboard | Afya Pedagógico</PageTitle>
+    <PageTitle>Dashboard | Afya Pedagógico</PageTitle>
 
-<CabecalhoPagina
-    Titulo="Dashboard"
-    Subtitulo="Visão geral da plataforma e indicadores de desempenho.">
+    <CabecalhoPagina Titulo="Dashboard"
+                    Subtitulo="Visão geral da plataforma e indicadores de desempenho.">
 
-    <Acoes>
+        <Acoes>
+            <SeletorPeriodo Opcoes="DashboardData.Periodos"
+                            @bind-Valor="_periodo" />
 
-        <SeletorPeriodo
-            Opcoes="DashboardData.Periodos"
-            @bind-Valor="_periodo" />
+            <MudButton Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    Size="Size.Large"
+                    StartIcon="@Icons.Material.Filled.Add">
+                Novo Projeto
+            </MudButton>
+        </Acoes>
 
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   Size="Size.Large"
-                   StartIcon="@Icons.Material.Filled.Add">
-            Novo Projeto
-        </MudButton>
+    </CabecalhoPagina>
 
-    </Acoes>
+    <MudGrid Spacing="3">
 
-</CabecalhoPagina>
+        @foreach (var kpi in DashboardData.Kpis)
+        {
+            <MudItem xs="12" sm="6" lg="3">
+                <KpiCard Kpi="kpi" />
+            </MudItem>
+        }
 
-
-<MudGrid Spacing="3">
-
-    @foreach (var kpi in DashboardData.Kpis)
-    {
-        <MudItem xs="12"
-                 sm="6"
-                 lg="3">
-
-            <KpiCard Kpi="kpi" />
-
+        <MudItem xs="12" lg="7">
+            <GraficoReceita Meses="DashboardData.Meses"
+                            Receita="DashboardData.ReceitaMensal"
+                            Meta="DashboardData.MetaMensal" />
         </MudItem>
+
+        <MudItem xs="12" lg="5">
+            <GraficoDistribuicaoClientes
+                Total="DashboardData.TotalClientes"
+                Segmentos="DashboardData.SegmentosClientes" />
+        </MudItem>
+
+        <MudItem xs="12" lg="7">
+            <PerformanceProjetos
+                Projetos="DashboardData.Performance" />
+        </MudItem>
+
+        <MudItem xs="12" lg="5">
+            <AtividadesRecentes
+                Atividades="DashboardData.Atividades" />
+        </MudItem>
+
+        <MudItem xs="12">
+            <ProjetosRecentes
+                Projetos="DashboardData.ProjetosRecentes" />
+        </MudItem>
+
+    </MudGrid>
+
+    @code {
+        private string _periodo = "Últimos 30 dias";
     }
-
-</MudGrid>
-<MudGrid Spacing="3" Class="mt-1">
-
-    <MudItem xs="12" lg="7">
-
-        <GraficoReceita
-            Meses="DashboardData.Meses"
-            Receita="DashboardData.ReceitaMensal"
-            Meta="DashboardData.MetaMensal" />
-
-    </MudItem>
-
-    <MudItem xs="12" lg="5">
-
-        <ClientesSegmento
-            TotalClientes="DashboardData.TotalClientes"
-            Segmentos="DashboardData.SegmentosClientes" />
-
-    </MudItem>
-
-</MudGrid>
-<MudGrid Spacing="3" Class="mt-1">
-
-    <MudItem xs="12" lg="8">
-
-        <ProjetosRecentes />
-
-    </MudItem>
-
-    <MudItem xs="12" lg="4">
-
-        <AtividadesRecentes />
-
-    </MudItem>
-
-</MudGrid>
-
-@code {
-
-    private string _periodo = "Últimos 30 dias";
-
-}

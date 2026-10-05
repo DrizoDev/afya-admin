@@ -1,99 +1,53 @@
-<DashboardCard Titulo="Atividades Recentes"
-               Subtitulo="Últimas movimentações da plataforma">
-
+<DashboardCard Titulo="Atividades Recentes">
     <Menu>
-        <MudMenuItem>Ver todas</MudMenuItem>
-        <MudMenuItem>Marcar como lidas</MudMenuItem>
+        <MudMenuItem>Ver histórico completo</MudMenuItem>
     </Menu>
 
     <ChildContent>
-
-        <MudStack Spacing="0" Class="mt-3">
+        <MudStack Spacing="3">
 
             @foreach (var atividade in Atividades)
             {
-                <div class="d-flex align-start py-3">
+                <MudStack Row="true"
+                          Spacing="3"
+                          AlignItems="AlignItems.Center">
 
-                    <MudAvatar Size="Size.Medium"
-                               Color="@atividade.Cor"
-                               Variant="Variant.Filled"
-                               Class="mr-3">
-
+                    <MudAvatar Size="Size.Small"
+                               Color="@atividade.Cor">
                         <MudIcon Icon="@atividade.Icone"
                                  Size="Size.Small" />
-
                     </MudAvatar>
 
-                    <div style="flex:1;">
+                    <MudAvatar Size="Size.Medium"
+                               Color="Color.Default">
+                        @Ui.Iniciais(atividade.Nome)
+                    </MudAvatar>
 
-                        <MudText Typo="Typo.body2">
-                            <strong>@atividade.Usuario</strong>
-                            @atividade.Descricao
+                    <div class="flex-grow-1">
+                        <MudText Typo="Typo.subtitle2">
+                            @atividade.Nome
                         </MudText>
 
-                        <MudText Typo="Typo.caption"
-                                 Class="mud-text-secondary mt-1">
-                            @atividade.Tempo
+                        <MudText Typo="Typo.body2"
+                                 Class="mud-text-secondary">
+                            @atividade.Acao
                         </MudText>
-
                     </div>
 
-                </div>
+                    <MudText Typo="Typo.body2"
+                             Class="mud-text-secondary">
+                        @atividade.Tempo
+                    </MudText>
 
-                @if (atividade != Atividades.Last())
-                {
-                    <MudDivider />
-                }
+                </MudStack>
             }
 
         </MudStack>
-
     </ChildContent>
-
 </DashboardCard>
 
 @code {
-
-    private readonly List<AtividadeRecente> Atividades = new()
-    {
-        new(
-            "Mariana Souza",
-            "adicionou um novo cliente.",
-            "há 5 minutos",
-            Icons.Material.Outlined.PersonAdd,
-            Color.Primary
-        ),
-
-        new(
-            "Ana Martins",
-            "publicou um novo relatório.",
-            "há 45 minutos",
-            Icons.Material.Outlined.Description,
-            Color.Success
-        ),
-
-        new(
-            "João Silva",
-            "atualizou as permissões do sistema.",
-            "há 1 hora",
-            Icons.Material.Outlined.Settings,
-            Color.Warning
-        ),
-
-        new(
-            "Carlos Lima",
-            "atualizou o projeto Integração CRM.",
-            "há 2 horas",
-            Icons.Material.Outlined.Edit,
-            Color.Info
-        )
-    };
-
-    private record AtividadeRecente(
-        string Usuario,
-        string Descricao,
-        string Tempo,
-        string Icone,
-        Color Cor
-    );
+    [Parameter, EditorRequired]
+    public IReadOnlyList<Atividade> Atividades { get; set; }
+        = Array.Empty<Atividade>();
 }
